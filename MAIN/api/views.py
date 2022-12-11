@@ -23,3 +23,19 @@ def api_detail_page(request, slug):
     if request.method == "GET":
         serializer = PostSerializer(post)
         return Response(serializer.data)
+
+
+@api_view(["PUT"])
+def api_update_view(request, slug):
+    try:
+        post = Post.objects.get(slug=slug)
+    except Post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "PUT":
+        serializer = PostSerializer(post, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        
