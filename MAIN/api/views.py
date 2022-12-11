@@ -5,12 +5,22 @@ from MAIN.models import Post
 from .serializers import PostSerializer
 from django.contrib.auth.models import User
 
-@api_view(["GET"])
+@api_view(["GET", "POST"])
 def api_home_page(request):
     if request.method == "GET":
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
+
+    elif request.method == "POST":
+        user = User.objects.get(pk=1)
+        post = Post(author=user)
+
+        if request.method == "POST":
+            serializer = PostSerializer(post, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
 
 
 @api_view(["GET"])
