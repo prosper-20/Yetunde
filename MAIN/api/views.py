@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from MAIN.models import Post
 from .serializers import PostSerializer
-
+from django.contrib.auth.models import User
 
 @api_view(["GET"])
 def api_home_page(request):
@@ -54,7 +54,19 @@ def api_delete_view(request, slug):
         else:
             data["Response"] = "Post delete failed"
         return Response(data=data)
-        
+
+
+@api_view(["POST"])
+def api_create_view(request):
+    user = User.objects.get(pk=1)
+    post = Post(author=user)
+
+    if request.method == "POST":
+        serializer = PostSerializer(post, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)        
 
     
 
