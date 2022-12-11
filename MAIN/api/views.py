@@ -39,5 +39,26 @@ def api_update_view(request, slug):
             serializer.save()
             return Response(serializer.data)
 
+@api_view(["DELETE"])
+def api_delete_view(request, slug):
+    try:
+        post = Post.objects.get(slug=slug)
+    except Post.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "DELETE":
+        data = {}
+        operation = post.delete()
+        if operation:
+            data["Response"] = "Your post has been deleted successfully!"
+        else:
+            data["Response"] = "Post delete failed"
+        
+        return Response(data=data)
+        
+
+    
+
+
 
         
