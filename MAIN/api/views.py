@@ -23,7 +23,7 @@ def api_home_page(request):
                 return Response(serializer.data)
 
 
-@api_view(["GET"])
+@api_view(["GET", "PUT"])
 def api_detail_page(request, slug):
     try:
         post = Post.objects.get(slug=slug)
@@ -33,6 +33,12 @@ def api_detail_page(request, slug):
     if request.method == "GET":
         serializer = PostSerializer(post)
         return Response(serializer.data)
+
+    elif request.method == "PUT":
+        serializer = PostSerializer(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
 
 
 @api_view(["PUT"])
