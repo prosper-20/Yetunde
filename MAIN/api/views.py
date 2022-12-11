@@ -53,7 +53,6 @@ def api_delete_view(request, slug):
             data["Response"] = "Your post has been deleted successfully!"
         else:
             data["Response"] = "Post delete failed"
-        
         return Response(data=data)
         
 
