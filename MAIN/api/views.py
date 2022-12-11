@@ -37,5 +37,7 @@ def api_update_view(request, slug):
 
         if serializer.is_valid():
             serializer.save()
-            return Response(status=status.HTTP_202_ACCEPTED)
+            return Response(serializer.data)
+
+
         
